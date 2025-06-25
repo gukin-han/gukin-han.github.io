@@ -2,7 +2,7 @@
 
 - 객체의 내부 상태가 바뀜에 따라서 객체의 행동을 바꿀 수 있다
 
-![](./assets/state-pattern-class-diagram.excalidraw.png)
+![](./assets/state-pattern-class-diagram.excalidraw.svg)
 
 - 추상 클래스, 인터페이스를 이용하여 State 클래스를 구현
   - 추상 클래스를 사용하면 구상 클래스 코드를 수정하지 않고 추상 클래스에 메소드 추가 가능
