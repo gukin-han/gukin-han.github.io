@@ -1,7 +1,9 @@
 - 02 Solutions
-  - [Java Spring Security](/02-solutions/java-spring-security/index.md)
   - [Java Spring AOP](/02-solutions/java-spring-aop/index.md)
+  - [스프링 시큐리티](/02-solutions/java-spring-security/index.md)
+  - [OAuth2](/02-solutions/oauth2/index.md)
+  - [리액트](/02-solutions/react/index.md)
 
 - 03 Concepts
-  - [Design Pattern Proxy](/03-concepts/design-pattern-proxy/index.md)
-  - [Design Pattern State](/03-concepts/design-pattern-state/index.md)
+  - [프록시 패턴 (Proxy Pattern)](/03-concepts/design-pattern-proxy/index.md)
+  - [상태 패턴 (State Pattern)](/03-concepts/design-pattern-state/index.md)
