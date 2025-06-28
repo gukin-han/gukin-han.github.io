@@ -1,4 +1,4 @@
-name: Update Sidebar
+name: Update Sidebar (with PAT)
 
 on:
   push:
@@ -6,11 +6,8 @@ on:
     paths-ignore:
       - '_sidebar.md'
       - '.github/workflows/update-sidebar.yml'
+      - '.github/workflows/update-sidebar-with-token.yml'
   workflow_dispatch:
-
-permissions:
-  contents: write
-  pull-requests: write
 
 jobs:
   update-sidebar:
@@ -20,7 +17,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         fetch-depth: 0
 
     - name: Set up Python

@@ -19,6 +19,32 @@
    - 각 `index.md` 파일의 첫 번째 `#` 제목을 추출합니다
    - 디렉토리 구조에 따라 사이드바를 자동 생성합니다
 
+### 권한 설정
+
+GitHub Actions가 저장소에 커밋을 푸시하려면 적절한 권한이 필요합니다.
+
+#### 방법 1: Repository Settings에서 권한 설정 (권장)
+
+1. GitHub 저장소 페이지에서 **Settings** 탭으로 이동
+2. 왼쪽 메뉴에서 **Actions** → **General** 선택
+3. **Workflow permissions** 섹션에서:
+   - **Read and write permissions** 선택
+   - **Allow GitHub Actions to create and approve pull requests** 체크
+4. **Save** 클릭
+
+#### 방법 2: Personal Access Token 사용
+
+만약 위 방법이 작동하지 않는다면:
+
+1. GitHub에서 **Settings** → **Developer settings** → **Personal access tokens** → **Tokens (classic)** 이동
+2. **Generate new token** 클릭
+3. **repo** 권한을 체크하고 토큰 생성
+4. 저장소의 **Settings** → **Secrets and variables** → **Actions**에서:
+   - **New repository secret** 클릭
+   - Name: `PERSONAL_ACCESS_TOKEN`
+   - Value: 생성한 토큰 입력
+5. `.github/workflows/update-sidebar-with-token.yml` 워크플로우 사용
+
 ### 디렉토리 구조
 
 ```
