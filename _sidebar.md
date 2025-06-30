@@ -7,6 +7,7 @@
 - 03 Concepts
   - [프록시 패턴 (Proxy Pattern)](/03-concepts/design-pattern-proxy/index.md)
   - [상태 패턴 (State Pattern)](/03-concepts/design-pattern-state/index.md)
+  - [전략 패턴](/03-concepts/design-pattern-strategy/index.md)
 
 - 04 Backend
   - [멀티플렉싱(Multiplexing) vs 디멀티플렉싱(De-multiplexing)](/04-backend/communication-multiplexing/index.md)
