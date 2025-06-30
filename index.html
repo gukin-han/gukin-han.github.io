@@ -11,13 +11,31 @@
   </head>
   <body>
     <div id="app"></div>
+
+    <!-- 1. Docsify 설정 + 콜아웃 매핑  ------------------------------------>
     <script>
       window.$docsify = {
         loadSidebar: true,
         subMaxLevel: 2,
-        homepage: '/README.md'
+        homepage: '/README.md',
+
+        /* GitHub callout 문법 지원 -------------------------------*/
+        'flexible-alerts': {
+          style: 'callout',      // GitHub와 비슷한 외곽선형
+          important: {           // ➜ [!IMPORTANT]
+            label: 'IMPORTANT',
+            icon: '❗'
+          },
+          caution: {             // ➜ [!CAUTION]
+            label: 'CAUTION',
+            icon: '🚨'
+          }
+        }
       };
     </script>
+
+    <!-- 2. 스크립트 로드 순서: Docsify → 플러그인 ------------------------>
     <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+    <script src="//cdn.jsdelivr.net/npm/docsify-plugin-flexible-alerts/dist/docsify-plugin-flexible-alerts.min.js"></script>
   </body>
 </html>
