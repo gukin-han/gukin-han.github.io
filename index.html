@@ -7,6 +7,8 @@
 
     <!-- 1) Docsify 기본 테마 -->
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/themes/vue.css" />
+    <!-- PrismJS 테마 추가 -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" />
   </head>
 
   <body>
@@ -25,18 +27,14 @@
           buttonText: 'Copy',    // 복사 아이콘
           successText: '✓',    // 복사 완료 아이콘
           align: 'top'         // 버튼 위치: 코드 상단
-        },
-        prism: {            // docsify-prism 옵션
-        lineNumbers: true
-      }
+        }
       };
-
     </script>
 
     <!-- 4) Docsify 코어 -->
-  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify-prism/dist/index.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+    <script src="//cdn.jsdelivr.net/npm/docsify-prism/dist/index.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
 
   </body>
 </html>
