@@ -3,9 +3,6 @@ name: Update Sidebar and Deploy Pages
 on:
   push:
     branches: [ main, master ]
-    paths-ignore:
-      - '_sidebar.md'
-      - '.github/workflows/update-sidebar-and-deploy.yml'
   workflow_dispatch:
 
 permissions:
@@ -14,8 +11,7 @@ permissions:
   id-token: write
 
 jobs:
-  generate-sidebar:
-    name: Generate Sidebar Only
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -29,28 +25,8 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Generate sidebar artifact (no commit)
+      - name: Generate sidebar
         run: python3 .github/scripts/generate-sidebar.py
-
-  deploy-pages:
-    name: Deploy to GitHub Pages
-    needs: generate-sidebar
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Checkout repository with sidebar
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
-
-      - name: Set up Python and regenerate sidebar (ensure artifact present)
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-      - run: python3 .github/scripts/generate-sidebar.py
 
       - name: Configure Pages
         uses: actions/configure-pages@v4
