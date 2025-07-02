@@ -1,4 +1,4 @@
-# Security OAuth
+# Security OAuth2
 
 ## 인증 플로우
 
