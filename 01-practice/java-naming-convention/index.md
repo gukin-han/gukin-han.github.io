@@ -1,4 +1,4 @@
-# java naming convention
+# Java Naming Convention
 
 ## find vs. get
 

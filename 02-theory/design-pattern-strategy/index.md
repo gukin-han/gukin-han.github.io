@@ -1,4 +1,4 @@
-# 전략 패턴
+# Design Pattern Strategy
 
 ## 전략 + 지연(Lazy) 파라미터
 

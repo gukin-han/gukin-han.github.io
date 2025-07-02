@@ -1,4 +1,4 @@
-# jwt basic
+# Security OAuth
 
 ## 인증 플로우
 

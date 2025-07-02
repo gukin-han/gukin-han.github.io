@@ -1,4 +1,4 @@
-# 상태 패턴 (State Pattern)
+# Design Pattern State
 
 - 객체의 내부 상태가 바뀜에 따라서 객체의 행동을 바꿀 수 있다
 

@@ -1,4 +1,4 @@
-# 프록시 패턴 (Proxy Pattern)
+# Design Pattern Proxy
 
 
 - 정의

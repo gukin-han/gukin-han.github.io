@@ -1,4 +1,4 @@
-# 스프링 시큐리티
+# Java Spring Security
 
 ## `addFilterBefore` + 수동등록
 

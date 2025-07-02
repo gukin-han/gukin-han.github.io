@@ -1,4 +1,4 @@
-# OAuth2
+# Security OAuth2
 
 ## 구글 로그인 (콘솔 작업)
 
