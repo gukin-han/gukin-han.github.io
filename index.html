@@ -1,41 +1,73 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta charset="UTF-8" />
+
+    <!-- 1) Docsify 기본 테마 -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/themes/vue.css" />
+
+    <!-- 2) Prism 기본 테마 -->
     <link
       rel="stylesheet"
-      href="//cdn.jsdelivr.net/npm/docsify@4/themes/vue.css"
+      href="//cdnjs.cloudflare.com/ajax/libs/prism/1.32.1/themes/prism-tomorrow.min.css"
+    />
+    <!-- 3) Prism 라인 넘버 CSS -->
+    <link
+      rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/prism/1.32.1/plugins/line-numbers/prism-line-numbers.min.css"
     />
   </head>
+
   <body>
     <div id="app"></div>
 
-    <!-- 1. Docsify 설정 + 콜아웃 매핑  ------------------------------------>
     <script>
+      // ——— Docsify 설정 ——————————————————————————————————————————
       window.$docsify = {
+        // 기존 설정들 유지
         loadSidebar: true,
         subMaxLevel: 2,
         homepage: '/README.md',
 
-        /* GitHub callout 문법 지원 -------------------------------*/
-        'flexible-alerts': {
-          style: 'callout',      // GitHub와 비슷한 외곽선형
-          important: {           // ➜ [!IMPORTANT]
-            label: 'IMPORTANT',
-            icon: '❗'
-          },
-          caution: {             // ➜ [!CAUTION]
-            label: 'CAUTION',
-            icon: '🚨'
-          }
+        // 복사 버튼 플러그인 옵션
+        copyCode: {
+          buttonText: '📋',    // 복사 아이콘
+          successText: '✓',    // 복사 완료 아이콘
+          align: 'top'         // 버튼 위치: 코드 상단
         }
       };
+
+      // Prism 하이라이팅 + 라인 넘버 자동 활성화
+      window.$docsify.plugins = [].concat(
+        (hook, vm) => {
+          hook.doneEach(() => {
+            // 모든 <pre><code> 부모(<pre>)에 line-numbers 클래스 추가
+            document.querySelectorAll('pre code').forEach(block => {
+              block.parentNode.classList.add('line-numbers');
+            });
+            // Prism.js 코드 하이라이팅 실행
+            Prism.highlightAll();
+          });
+        },
+        window.$docsify.plugins
+      );
     </script>
 
-    <!-- 2. 스크립트 로드 순서: Docsify → 플러그인 ------------------------>
+    <!-- 4) Docsify 코어 -->
     <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
-    <script src="//cdn.jsdelivr.net/npm/docsify-plugin-flexible-alerts/dist/docsify-plugin-flexible-alerts.min.js"></script>
+
+    <!-- 5) Prism.js 코어 + 언어별 컴포넌트 -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/prism/1.32.1/prism.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/prism/1.32.1/components/prism-java.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/prism/1.32.1/components/prism-javascript.min.js"></script>
+    <!-- 필요하신 언어가 더 있다면 위에 추가 -->
+
+    <!-- 6) Prism 라인 넘버 플러그인 -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/prism/1.32.1/plugins/line-numbers/prism-line-numbers.min.js"></script>
+
+    <!-- 7) Docsify 코드 복사 버튼 플러그인 -->
+    <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
   </body>
 </html>
