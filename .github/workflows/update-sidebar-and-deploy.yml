@@ -14,7 +14,8 @@ permissions:
   id-token: write
 
 jobs:
-  update-sidebar:
+  generate-sidebar:
+    name: Generate Sidebar Only
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -28,35 +29,30 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Generate sidebar
+      - name: Generate sidebar artifact (no commit)
         run: python3 .github/scripts/generate-sidebar.py
 
-      - name: Commit and push changes
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add _sidebar.md
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "Auto-update sidebar"
-            git push
-          fi
-
   deploy-pages:
-    needs: update-sidebar
+    name: Deploy to GitHub Pages
+    needs: generate-sidebar
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Checkout repository
+      - name: Checkout repository with sidebar
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: Setup Pages
+      - name: Set up Python and regenerate sidebar (ensure artifact present)
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - run: python3 .github/scripts/generate-sidebar.py
+
+      - name: Configure Pages
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
@@ -66,4 +62,4 @@ jobs:
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4 
+        uses: actions/deploy-pages@v4
