@@ -17,7 +17,7 @@
 ## 원격 프록시
 
 ![](./assets/proxy-pattern-class-diagram.excalidraw.svg)
-
+ 
 ## 동적 프록시
 
 ### 클래스 다이어그램
