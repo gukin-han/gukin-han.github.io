@@ -1,5 +1,31 @@
 # Redis Basic
 
+- [Redis Basic](#redis-basic)
+  - [Docker 기반 실행환경 세팅](#docker-기반-실행환경-세팅)
+  - [DB](#db)
+  - [String](#string)
+    - [String 구조에서 key-value](#string-구조에서-key-value)
+    - [key-value 삭제](#key-value-삭제)
+    - [유효기간 설정](#유효기간-설정)
+    - [String 실무활용1 : 인증정보 저장 (Auth)](#string-실무활용1--인증정보-저장-auth)
+    - [String 실무활용2 : 좋아요 기능 (Count)](#string-실무활용2--좋아요-기능-count)
+    - [String 실무활용3 : 재고 관리 (Count)](#string-실무활용3--재고-관리-count)
+    - [String 실무활용4: 캐싱](#string-실무활용4-캐싱)
+  - [List](#list)
+    - [리스트 조회](#리스트-조회)
+    - [데이터 개수 조회](#데이터-개수-조회)
+    - [TTL 적용\*\*](#ttl-적용)
+    - [실무활용1 : 최근 방문한 페이지, 최근 조회한 상품목록](#실무활용1--최근-방문한-페이지-최근-조회한-상품목록)
+  - [Set](#set)
+    - [실무활용1 : 좋아요 (count)](#실무활용1--좋아요-count)
+  - [ZSet](#zset)
+    - [실무활용 1 : 최근 본 상품 목록](#실무활용-1--최근-본-상품-목록)
+  - [Hash](#hash)
+  - [pub/sub](#pubsub)
+  - [Stream](#stream)
+  - [Redis 서버 구성](#redis-서버-구성)
+  - [References](#references)
+
 ## Docker 기반 실행환경 세팅
 
 1. docker desktop 설치: https://www.docker.com/
@@ -32,12 +58,9 @@ select 16
 - 0번은 [] 표시하지 않는다
 - 참고) https://redis.io/docs/latest/commands/select/
 
-
 ## String
 
-
 ### String 구조에서 key-value
-
 
 ```shell
 // 키-값 세팅
@@ -54,7 +77,7 @@ get user:email:1
 - 콜론(:)을 이용한 key 네이밍 컨벤션
 - 같은 key에 set하면 덮어씌워지는(overwrite) 방식
   - nx(=if not exists) 명령어를 마지막에 붙이면 overwrite 방지
-  - 예) `set user:email:1 gukin.dev@gmail.com nx` 
+  - 예) `set user:email:1 gukin.dev@gmail.com nx`
 
 ### key-value 삭제
 
@@ -72,9 +95,7 @@ flushdb
 
 - `del {key}` 커맨드 사용
 
-
 ### 유효기간 설정
-
 
 - redis를 사용하는 목적을 고려해보면
   - 빠른 성능
@@ -89,10 +110,9 @@ set user:eamil:3 gukin.dev@gmail.com ex 10
 - `ex` expiration
 - 단위는 seconds
 
-
 ### String 실무활용1 : 인증정보 저장 (Auth)
 
-![](./assets/ex-redis-auth.excalidraw.svg)
+![](./redis-basic.assets/ex-redis-auth.excalidraw.svg)
 
 ```shell
 set user:1:refresh_token eyjaxabaalsdkal ex 100000
@@ -105,7 +125,6 @@ set user:1:refresh_token eyjaxabaalsdkal ex 100000
 - 로그인을 하는 경우 저장되도록 trigger
 - 스네이크 케이스 (refresh_token)
 - keys 명령어는 성능 문제를 초래하기 때문에 운영환경에서는 사용하지 않는게 좋음
-
 
 ### String 실무활용2 : 좋아요 기능 (Count)
 
@@ -145,22 +164,19 @@ get stocks:product:1
 - TTL을 이용해서 만료기간을 설정한 설계를 염두
 - **참고)** JSON 형태로 Redis에 저장하면 프로그램에서 역직렬화하기 용이함
 
-
 ```shell
 set posting:1 "{\"title\":\"hello java\", \"contents\":\"hello java is ...\"}"
 ```
 
-* 참고) `\` 이스케이프 문자를 쌍따옴표 앞에 넣는다
+- 참고) `\` 이스케이프 문자를 쌍따옴표 앞에 넣는다
 
-
-
-## List 
+## List
 
 - deque (double-ended queue) 유사한 구조
-	- 리스트는 중간에 데이터를 넣을 수 있지만 shift로 인한 성능 문제가 있음
-		- Redis List 자료구조는 지원하지 않음
-	- 대신 양쪽 끝에 데이터를 넣는 방식이 효율적
-	- 조회도 유사
+  - 리스트는 중간에 데이터를 넣을 수 있지만 shift로 인한 성능 문제가 있음
+    - Redis List 자료구조는 지원하지 않음
+  - 대신 양쪽 끝에 데이터를 넣는 방식이 효율적
+  - 조회도 유사
 
 ```shell
 # 데이터를 왼쪽 끝에 삽입/조회
@@ -172,7 +188,6 @@ rpush
 rpop
 ```
 
-
 ```shell
 lpush testlist test1
 lpush testlist test2
@@ -180,7 +195,6 @@ rpush testlist test3
 
 lrange testlist 0 -1 # -1은 끝 인덱스
 ```
-
 
 ### 리스트 조회
 
@@ -195,15 +209,13 @@ lrange testlist -2 -1 # 마지막 2번째부터 마지막 자리까지 (역순)
 
 - negative를 사용하는 이유는 끝 인덱스를 모르는 경우가 있기 때문
 
-
 ### 데이터 개수 조회
 
 ```shell
 llen testlist
 ```
 
-
-### TTL 적용**
+### TTL 적용\*\*
 
 ```shell
 expire testlist 5
@@ -213,7 +225,6 @@ ttl testlist
 ```
 
 ### 실무활용1 : 최근 방문한 페이지, 최근 조회한 상품목록
-
 
 - 첫 번째 페이지, 두 번째 페이지, 세 번째 페이지
   - 최근 방문한 두 페이지 반환 (두 번째, 세 번째 페이지)
@@ -235,12 +246,11 @@ lrange user:1:recent-page -3 -1
 - 순서가 보장 + 중복 제거 -> zset
   - 목적은? **최근 조회한 상품 목록인 경우에 요구될 수 있음**
 
-
 ## Set
 
-* 수학적 정의의 SET과 동일
-	* 중복이 없다
-	* 순서가 없다
+- 수학적 정의의 SET과 동일
+  - 중복이 없다
+  - 순서가 없다
 
 ```shell
 # set add
@@ -261,9 +271,7 @@ srem memberlist member2
 sismember memberlist member1
 ```
 
-
 ### 실무활용1 : 좋아요 (count)
-
 
 - list 방식의 좋아요의 문제점
   - 특정 유저에 대한 중복 데이터가 삽입될 수 있음
@@ -286,10 +294,9 @@ sismember likes:posting:1 member1
   - 매일 방문자수 계산
   - 좋아요 수 중복없이 집계
 
-
 ## ZSet
 
-- 정렬된 집합(sorted  set)
+- 정렬된 집합(sorted set)
   - z는 정렬을 의미
 - 정렬 기준점(score)를 제공해야함
   - add 시점에 정렬
@@ -339,7 +346,6 @@ zrevrange recent:products 0 2
     - `zadd stock:samsung {시간} 53000`
   - 게임 등의 사용자의 점수나 순위를 관리
 
-
 ## Hash
 
 - value값이 map 형태 (key-value의 리스트 구조)
@@ -363,6 +369,7 @@ hincrby member:info:1 age -5
 ```
 
 **결과**
+
 ```text
 127.0.0.1:6379[1]> hset member:info:1 name hong email test@gmail.com age 10
 (integer) 3
@@ -395,16 +402,14 @@ hincrby member:info:1 age -5
 
 - 캐싱 처리시 플랫한 데이터 예) 상품의 재고, 가격 등을 묶는 목적으로 사용 가능
 - String 자료구조도 JSON 형태로이지만 String 묶음
-	- 중간 요소를 수정하기 위해 파싱/덮어쓰기를 해야하기 때문에 복잡도가 올라감
+  - 중간 요소를 수정하기 위해 파싱/덮어쓰기를 해야하기 때문에 복잡도가 올라감
 - 프로그램 내에서 **오브젝트를 캐싱하는 경우** json, hash로 할지에 대한 결정이 필요
 - 값이 빈번하게 변경되는 경우 hash를 써서 최적화할 수 있고, 자주 조회되는 경우 json
-	- hash와 json의 다른 차이점은 없나?
-
+  - hash와 json의 다른 차이점은 없나?
 
 ## pub/sub
 
 생략. 나중에 추가
-
 
 ## Stream
 
@@ -415,6 +420,7 @@ hincrby member:info:1 age -5
   - ❌ 이벤트 기반 시스템 -> 카프카를 대신 사용
   - ✅ 채팅 및 알림 시스템
 - 결론
+
   - stream 대신 kafka를 활용
   - kafka가 더 안정성이 보장되고, 다양한 기능을 제공
 
@@ -424,36 +430,32 @@ hincrby member:info:1 age -5
   - `*` : 메시지의 고유ID를 Redis가 자동 생성
 - `xread block 10000 streams test_stream $`
   - `block 10000`: 최대 10초 (10000ms) 동안 대기
-  - `$` : 현재 마지막 페이지 이후에 오는 새 메시지를 기다림 
+  - `$` : 현재 마지막 페이지 이후에 오는 새 메시지를 기다림
 - `xrange test_stream - +`
   - `xrange` 명령어는 redis stream에서 메시지를 조회할 때 사용
   - `-` : 시작 범위 (처음부터)
   - `+` : 끝 범위 (끝까지)
 
-![](./assets/order-redis.excalidraw.svg)
+![](./redis-basic.assets/order-redis.excalidraw.svg)
 
 - MSA 환경에서 비동기 통신으로 클라이언트에 대한 응답 속도를 높일 수 있다
-	- 업데이트는 비동기 통신으로 수행
+  - 업데이트는 비동기 통신으로 수행
 - 서버가 다운되는 경우 서비스간 통신이 카프카에 저장되기 때문에 retry 등의 안정성 확보
 
-
 ## Redis 서버 구성
-
 
 - 마스터 슬레이브 구조
   - 단순한 복제 목적으로 사용하는 방식은 의미 없음
   - 마스터는 저장, 슬레이브는 복제
   - 부하 분산
     - 마스터는 쓰기
-	- 슬레이브는 읽기
+  - 슬레이브는 읽기
 - 클러스터
   - 추가적인 설정과 구성 필요
   - 여러 마스터, 여러 슬레이브
   - 샤딩을 사용
 
-
 ## References
-
 
 1. https://picturesque-staircase-f6e.notion.site/redis-773bcaf9230047fdb12a874d216f1345
 2. https://medium.com/nerd-for-tech/unveiling-the-art-of-redis-key-naming-best-practices-6e20f3839e4a
