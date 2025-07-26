@@ -1,6 +1,5 @@
 # Design Pattern Proxy
 
-
 - 정의
   - 특정 객체로 의 접근을 제어하는 대리인을 제공
 - 종류
@@ -12,21 +11,17 @@
   - 데코레이터 패턴 : 새로운 행동을 추가 vs. 어떤 클래스로 접근 제어
   - 어댑터 패턴 : 인터페이스를 바꾸기 vs. 동일한 인터페이스 사용
 
-
-
 ## 원격 프록시
 
 ![](./assets/proxy-pattern-class-diagram.excalidraw.svg)
- 
+
 ## 동적 프록시
 
 ### 클래스 다이어그램
 
 ![](./assets/dynamic-proxy-pattern-class-diagram.excalidraw.svg)
 
-
 ### 코드 예제
-
 
 **공통 인터페이스 :**
 
@@ -47,7 +42,6 @@ public class RealService implements Service {
 ```
 
 **InvocationHandler 구현 :**
-
 
 ```java
 import java.lang.reflect.*;
@@ -73,7 +67,6 @@ public class ServiceInvocationHandler implements InvocationHandler {
     }
 }
 ```
-
 
 **프록시 생성 및 실행 :**
 
