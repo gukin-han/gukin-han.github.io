@@ -22,7 +22,7 @@
     - [9.4 용량/품질 관리](#94-용량품질-관리)
     - [9.5 고아 에셋 청소](#95-고아-에셋-청소)
   - [10. Kafka 예시(허브 → 분리)](#10-kafka-예시허브--분리)
-  - [11. 운영 규칙(스케일 가드레일)](#11-운영-규칙스케일-가드레일)
+  - [11. 운영 규칙(스케일-가드레일)](#11-운영-규칙스케일-가드레일)
   - [12. 마이그레이션 최소비용 플랜](#12-마이그레이션-최소비용-플랜)
   - [부록 A. 추천 .vscode/settings.json](#부록-a-추천-vscodesettingsjson)
   - [부록 B. pre-commit 훅(이미지 최적화 예시)](#부록-b-pre-commit-훅이미지-최적화-예시)
@@ -31,31 +31,30 @@
 ---
 
 
-## 1. 폴더 구조 (기본 트리)
+## 1. 폴더 구조 (v3, Type & Tech 2-Depth)
 
 ```text
-notes/
-├─ 00-inbox/                    # 급히 메모(주 1회 비우기)
-├─ 10-drafts/                   # (옵션) 작성 중 초안함
-├─ concepts/                    # 기술 불문 개념(원리·정의·보장)
-├─ patterns/                    # 설계/아키텍처 패턴(트레이드오프 포함)
-├─ recipes/                     # 구현 레시피(복붙 중심)
-│  ├─ java/
-│  ├─ spring/
-│  ├─ redis/
-│  ├─ kafka/
-│  └─ db/
-├─ experiments/                 # 실험/벤치마크/POC (환경·수치·결론)
-├─ decisions/                   # ADR/RFC 의사결정 기록
-├─ operations/                  # 운영/장애 대응 플레이북·체크리스트
-├─ 90-projects/                 # 프로젝트 문맥(스펙/회의록 등)
-│  └─ hr-sync/
-├─ assets/                      # 공용 에셋(2회↑ 재사용)
-└─ 99-z-archive/                # 휴면/폐기 (검색엔 걸리게)
-````
+/
+├── 10-inbox/              # (1-depth) 모든 아이디어의 시작점
+├── 20-concepts/           # (1-depth) 개념, 원리
+│   └── general/           # (2-depth) 특정 기술에 국한되지 않는 일반 개념
+├── 30-patterns/           # (1-depth) 설계/아키텍처 패턴
+│   └── architecture/      # (2-depth) 특정 프레임워크/기술을 넘어선 패턴
+├── 40-recipes/            # (1-depth) 코드 조각, 설정, 명령어
+│   ├── git/
+│   └── java/
+├── 50-decisions/          # (1-depth) 의사결정 기록 (ADR)
+├── 60-experiments/        # (1-depth) 기술 실험, POC
+├── 70-projects/           # (1-depth) 프로젝트 관련 문서
+├── 80-resources/          # (1-depth) 재사용 자원
+│   ├── assets/
+│   └── templates/
+└── 99-archive/            # (1-depth) 보관소
+```
 
-* **폴더 = 작업 목적/문서 타입.**
-* **기술(Java/Redis/Kafka) = 태그** 또는 `recipes/` 하위 폴더.
+*   **1-depth (최상위 폴더)**: 노트의 **종류** (컨셉, 패턴, 레시피 등)를 정의합니다.
+*   **2-depth (하위 폴더)**: **기술 스택** (Java, Redis 등) 또는 일반 주제 (General, Architecture)로 분류합니다.
+*   모든 노트(`.md`)는 2-depth 폴더 아래에 위치하여, `타입/기술/노트.md` 구조를 유지합니다.
 
 ---
 
@@ -232,6 +231,10 @@ echo "Wrote $OUT"
   "editor.wordWrap": "on",
   "files.autoSave": "afterDelay",
   "files.autoSaveDelay": 700,
+
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "markdown.extension.toc.updateOnSave": true,
 
   "pasteImage.path": "${currentFileDir}/${currentFileNameWithoutExt}.assets",
@@ -329,9 +332,7 @@ done
 
   "pasteImage.path": "${currentFileDir}/${currentFileNameWithoutExt}.assets",
   "pasteImage.insertPattern": "![](${imagePath})",
-  "pasteImage.defaultName": "${currentFileNameWithoutExt}-${currentDate}${currentTime}",
-
-  "files.trimTrailingWhitespace": true
+  "pasteImage.defaultName": "${currentFileNameWithoutExt}-${currentDate}${currentTime}"
 }
 ```
 
@@ -342,7 +343,7 @@ done
 ```bash
 #!/usr/bin/env bash
 set -e
-changed=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(png|jpg|jpeg)$' || true)
+changed=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(png|jpg|jpeg)\n\n || true)
 for f in $changed; do
   [ -f "$f" ] || continue
   # WebP 생성
